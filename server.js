@@ -10,51 +10,16 @@ require("dotenv").config();
 
 const app = express();
 
-// Find this section in your server.js and replace it:
+// ✅ PERFECT CORS - This will fix everything!
+app.use(
+  cors({
+    origin: "*",
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  }),
+);
 
-// CORS Configuration (FIXED FOR PRODUCTION)
-const corsOptions = {
-  origin: function (origin, callback) {
-    // Allow requests with no origin (mobile apps, curl, etc.)
-    if (!origin) return callback(null, true);
-
-    console.log("🔍 CORS request from origin:", origin);
-
-    const allowedOrigins = [
-      // Development
-      "http://localhost:5500",
-      "http://127.0.0.1:5500",
-      "http://localhost:5501",
-      "http://127.0.0.1:5501",
-      "http://localhost:3000",
-      "http://127.0.0.1:3000",
-      "http://localhost:8080",
-
-      // Production - YOUR EXACT DOMAINS
-      "https://naukriwala-scholership-website.netlify.app/",
-      "https://naukriwala-scholership-website.onrender.com",
-    ];
-
-    if (allowedOrigins.includes(origin)) {
-      console.log("✅ CORS allowed for:", origin);
-      callback(null, true);
-    } else {
-      console.log("❌ CORS blocked origin:", origin);
-      console.log("📝 Allowed origins:", allowedOrigins);
-      callback(new Error("Not allowed by CORS"));
-    }
-  },
-  credentials: true,
-  optionsSuccessStatus: 200,
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
-};
-
-app.use(cors(corsOptions));
-
-// Handle preflight requests explicitly
-app.options("*", cors(corsOptions));
-
+// Express middleware (REMOVE DUPLICATE)
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true }));
 
@@ -73,7 +38,7 @@ const paymentLimiter = rateLimit({
 
 app.use(generalLimiter);
 
-// PhonePe V2 Configuration (Updated with working credentials)
+// PhonePe V2 Configuration
 const PHONEPE_CONFIG = {
   clientId: process.env.PHONEPE_CLIENT_ID,
   clientVersion: process.env.PHONEPE_CLIENT_VERSION,
@@ -84,7 +49,7 @@ const PHONEPE_CONFIG = {
   env: process.env.PHONEPE_ENV || "PROD",
 };
 
-// PhonePe V2 URLs (Production OAuth Working)
+// PhonePe V2 URLs
 const PHONEPE_URLS = {
   UAT: {
     token: "https://api-preprod.phonepe.com/apis/pg-sandbox/v1/oauth/token",
@@ -98,13 +63,42 @@ const PHONEPE_URLS = {
   },
 };
 
+// MongoDB connection (KEEP ONLY ONE VERSION)
+mongoose.connect(process.env.MONGODB_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  serverSelectionTimeoutMS: 5000,
+  socketTimeoutMS: 45000,
+  family: 4,
+  retryWrites: true,
+  retryReads: true,
+  maxPoolSize: 10,
+  bufferMaxEntries: 0,
+  bufferCommands: false,
+});
+
+const db = mongoose.connection;
+db.on("error", (error) => {
+  console.error("❌ MongoDB connection error:", error.message);
+  console.error("💡 Check if Render IPs are whitelisted in MongoDB Atlas");
+});
+db.once("open", () => {
+  console.log("✅ Connected to MongoDB");
+  fixDatabaseIndexes(); // Make sure this function exists later in your file
+});
+db.on("disconnected", () => {
+  console.log("📡 MongoDB disconnected. Attempting to reconnect...");
+});
+
+// Continue with your schemas, routes, etc...
+
 // MongoDB connection
 mongoose.connect(process.env.MONGODB_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
 
-const db = mongoose.connection;
+// const db = mongoose.connection;
 db.on("error", (error) => console.error("❌ MongoDB connection error:", error));
 db.once("open", () => console.log("✅ Connected to MongoDB"));
 
