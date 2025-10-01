@@ -1,0 +1,47 @@
+2025-09-24T20:56:03: ❌ MongoDB connection error: MongoServerSelectionError: 0CD80000:error:0A000438:SSL routines:ssl3_read_bytes:tlsv1 alert internal error:c:\ws\deps\openssl\openssl\ssl\record\rec_layer_s3.c:1605:SSL alert number 80
+2025-09-24T20:56:03: 
+2025-09-24T20:56:03:     at Timeout._onTimeout (C:\Users\admin\OneDrive\Desktop\Demo task\Task - Copy main\node_modules\mongodb\lib\sdam\topology.js:278:38)
+2025-09-24T20:56:03:     at listOnTimeout (node:internal/timers:594:17)
+2025-09-24T20:56:03:     at process.processTimers (node:internal/timers:529:7) {
+2025-09-24T20:56:03:   reason: TopologyDescription {
+2025-09-24T20:56:03:     type: 'ReplicaSetNoPrimary',
+2025-09-24T20:56:03:     servers: Map(3) {
+2025-09-24T20:56:03:       'ac-jhiggsb-shard-00-00.p0wrbtv.mongodb.net:27017' => [ServerDescription],
+2025-09-24T20:56:03:       'ac-jhiggsb-shard-00-01.p0wrbtv.mongodb.net:27017' => [ServerDescription],
+2025-09-24T20:56:03:       'ac-jhiggsb-shard-00-02.p0wrbtv.mongodb.net:27017' => [ServerDescription]
+2025-09-24T20:56:03:     },
+2025-09-24T20:56:03:     stale: false,
+2025-09-24T20:56:03:     compatible: true,
+2025-09-24T20:56:03:     heartbeatFrequencyMS: 10000,
+2025-09-24T20:56:03:     localThresholdMS: 15,
+2025-09-24T20:56:03:     setName: 'atlas-ytms9b-shard-0',
+2025-09-24T20:56:03:     maxElectionId: null,
+2025-09-24T20:56:03:     maxSetVersion: null,
+2025-09-24T20:56:03:     commonWireVersion: 0,
+2025-09-24T20:56:03:     logicalSessionTimeoutMinutes: null
+2025-09-24T20:56:03:   },
+2025-09-24T20:56:03:   code: undefined,
+2025-09-24T20:56:03:   [Symbol(errorLabels)]: Set(0) {}
+2025-09-24T20:56:03: }
+2025-09-24T20:56:03: MongooseServerSelectionError: Could not connect to any servers in your MongoDB Atlas cluster. One common reason is that you're trying to access the database from an IP that isn't whitelisted. Make sure your current IP address is on your Atlas cluster's IP whitelist: https://www.mongodb.com/docs/atlas/security-whitelist/
+2025-09-24T20:56:03:     at _handleConnectionErrors (C:\Users\admin\OneDrive\Desktop\Demo task\Task - Copy main\node_modules\mongoose\lib\connection.js:816:11)
+2025-09-24T20:56:03:     at NativeConnection.openUri (C:\Users\admin\OneDrive\Desktop\Demo task\Task - Copy main\node_modules\mongoose\lib\connection.js:791:11) {
+2025-09-24T20:56:03:   reason: TopologyDescription {
+2025-09-24T20:56:03:     type: 'ReplicaSetNoPrimary',
+2025-09-24T20:56:03:     servers: Map(3) {
+2025-09-24T20:56:03:       'ac-jhiggsb-shard-00-00.p0wrbtv.mongodb.net:27017' => [ServerDescription],
+2025-09-24T20:56:03:       'ac-jhiggsb-shard-00-01.p0wrbtv.mongodb.net:27017' => [ServerDescription],
+2025-09-24T20:56:03:       'ac-jhiggsb-shard-00-02.p0wrbtv.mongodb.net:27017' => [ServerDescription]
+2025-09-24T20:56:03:     },
+2025-09-24T20:56:03:     stale: false,
+2025-09-24T20:56:03:     compatible: true,
+2025-09-24T20:56:03:     heartbeatFrequencyMS: 10000,
+2025-09-24T20:56:03:     localThresholdMS: 15,
+2025-09-24T20:56:03:     setName: 'atlas-ytms9b-shard-0',
+2025-09-24T20:56:03:     maxElectionId: null,
+2025-09-24T20:56:03:     maxSetVersion: null,
+2025-09-24T20:56:03:     commonWireVersion: 0,
+2025-09-24T20:56:03:     logicalSessionTimeoutMinutes: null
+2025-09-24T20:56:03:   },
+2025-09-24T20:56:03:   code: undefined
+2025-09-24T20:56:03: }

@@ -1,0 +1,7 @@
+2025-09-24T20:55:33: 🚀 Server running on port 3000
+2025-09-24T20:55:33: 📋 Health check: http://localhost:3000/health
+2025-09-24T20:55:33: 💳 Payment endpoint: http://localhost:3000/api/payment/initiate
+2025-09-24T20:55:33: 📧 Email configured: Yes
+2025-09-24T20:55:33: 🔒 PhonePe Environment: PROD
+2025-09-24T20:55:33: 💾 Database: Connecting...
+2025-09-24T20:55:35: ✅ Email server ready

@@ -1,0 +1,502 @@
+<!doctype html>
+<html lang="mr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Naukrivalaa Foundation Scholarship 2025</title>
+    <link rel="icon" type="image/png" href="favicon.png" />
+    <meta
+      name="description"
+      content="Naukrivalaa Foundation Scholarship 2025 – ₹5,000 scholarship for 8th–12th, ITI, Diploma, and Engineering students. Register now. Form + fee + transparent shortlisting (No Exam)"
+    />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+
+    <link rel="stylesheet" href="styles.css" />
+    <script defer src="script.js"></script>
+  </head>
+  <body>
+    <!-- Loading overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+      <div class="loading-content">
+        <div class="spinner"></div>
+        <h3>Processing Payment...</h3>
+        <p>कृपया थांबा, आपला पेमेंट प्रोसेस होत आहे</p>
+        <p class="muted" style="margin-top: 15px; font-size: 14px">
+          Please do not close this window or navigate away
+        </p>
+      </div>
+    </div>
+
+    <header>
+      <div class="container">
+        <div class="nav">
+          <div class="logo">
+            <img
+              src="/images/logo.png"
+              alt="Naukrivalaa Foundation Logo"
+              style="height: 40px; border-radius: 8px"
+            />
+            <div style="font-weight: 800; font-size: 18px; margin-left: 8px">
+              Naukrivalaa Foundation
+            </div>
+          </div>
+
+          <nav class="nav-cta">
+            <a href="#eligibility" class="btn secondary">Eligibility</a>
+            <a href="#selection" class="btn secondary">Selection</a>
+            <a href="#apply" class="btn primary">Apply Now</a>
+          </nav>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <!-- HERO -->
+      <section class="hero">
+        <div class="container hero-grid">
+          <!-- Left: Headline + CTA -->
+          <div>
+            <div class="badge" style="margin-bottom: 10px">
+              🎓 Scholarship 2025 खुली आहे • No Exam
+            </div>
+            <h1>Naukrivalaa Foundation Scholarship 2025</h1>
+            <p>
+              ८वी ते १२वी, ITI, Diploma आणि Engineering विद्यार्थ्यांसाठी
+              <strong>₹5,000</strong> Scholarship.<br />Form + Fee ₹99 •
+              Transparent Shortlisting
+            </p>
+
+            <div class="chips" aria-label="categories" style="margin-top: 12px">
+              <span class="chip">8वी–12वी</span>
+              <span class="chip">ITI</span>
+              <span class="chip">Diploma</span>
+              <span class="chip">Engineering</span>
+            </div>
+
+            <div
+              style="
+                margin-top: 18px;
+                display: flex;
+                gap: 10px;
+                flex-wrap: wrap;
+              "
+            >
+              <a class="btn primary" href="#apply">आत्ता अर्ज करा</a>
+              <a class="btn secondary" href="#selection">Selection Criteria</a>
+            </div>
+          </div>
+
+          <!-- Right: Image + Selection Card (stacked) -->
+          <div style="display: flex; flex-direction: column; gap: 16px">
+            <!-- Image card -->
+            <div class="hero-card" style="padding: 0; overflow: hidden">
+              <img
+                src="/images/naukrivalaa.jpg"
+                alt="Pravin Deore - Naukrivalaa Foundation"
+                style="
+                  width: 100%;
+                  height: auto;
+                  display: block;
+                  border-radius: 14px;
+                "
+              />
+              <div
+                style="
+                  padding: 12px 16px;
+                  text-align: center;
+                  color: #cbd5e1;
+                  background: linear-gradient(
+                    180deg,
+                    rgba(11, 16, 32, 0.6),
+                    rgba(11, 16, 32, 0.4)
+                  );
+                "
+              >
+                <strong>Pravin Deore</strong><br /><span style="font-size: 13px"
+                  >Founder – Naukrivalaa Foundation</span
+                >
+              </div>
+            </div>
+
+            <!-- Selection weights card -->
+            <div
+              class="hero-card"
+              style="
+                padding: 16px;
+                margin: 20px auto;
+                max-width: 420px;
+                text-align: right;
+              "
+            >
+              <h2 style="margin: 0 0 8px; text-align: center">
+                निवड कशी होईल?
+              </h2>
+              <div style="display: grid; gap: 10px">
+                <div>
+                  <div style="display: flex; justify-content: space-between">
+                    <strong>Family Income</strong><span>40%</span>
+                  </div>
+                  <div class="bar" aria-hidden>
+                    <span style="width: 40%"></span>
+                  </div>
+                </div>
+                <div>
+                  <div style="display: flex; justify-content: space-between">
+                    <strong>Achievements</strong><span>25%</span>
+                  </div>
+                  <div class="bar"><span style="width: 25%"></span></div>
+                </div>
+                <div>
+                  <div style="display: flex; justify-content: space-between">
+                    <strong>SOP</strong><span>25%</span>
+                  </div>
+                  <div class="bar"><span style="width: 25%"></span></div>
+                </div>
+                <div>
+                  <div style="display: flex; justify-content: space-between">
+                    <strong>Recommendation</strong><span>10%</span>
+                  </div>
+                  <div class="bar"><span style="width: 10%"></span></div>
+                </div>
+              </div>
+              <p class="muted" style="margin-top: 10px">
+                Final Score = Weighted Average • Higher Score = Higher Priority
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ELIGIBILITY -->
+      <section id="eligibility">
+        <div class="container section-card">
+          <h2>कोण अर्ज करू शकतो? (Eligibility)</h2>
+          <div class="grid cols-3">
+            <div class="pill">🏫 ८वी–१२वी विद्यार्थी</div>
+            <div class="pill">🛠 ITI विद्यार्थी</div>
+            <div class="pill">📘 Diploma विद्यार्थी</div>
+            <div class="pill">🎓 Engineering विद्यार्थी</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SELECTION -->
+      <section id="selection">
+        <div class="container section-card">
+          <h2>Selection Process (Transparent & Fair)</h2>
+          <ul>
+            <li>
+              <strong>Family Income – 40%</strong> • Lower income = Higher score
+            </li>
+            <li><strong>Achievements – 25%</strong> • National/State/School</li>
+            <li><strong>SOP – 25%</strong> • Clarity, Originality, Impact</li>
+            <li>
+              <strong>Recommendation – 10%</strong> • Principal/Teacher/HOD
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- DATES -->
+      <section>
+        <div class="container section-card">
+          <h2>महत्वाच्या तारखा (Important Dates)</h2>
+          <div class="dates">
+            <div class="date">
+              <strong>Registration सुरू</strong><br /><span class="muted"
+                >Every Month – 1st</span
+              >
+            </div>
+            <div class="date">
+              <strong>Last Date</strong><br /><span class="muted"
+                >Every Month – 28th</span
+              >
+            </div>
+            <div class="date">
+              <strong>Result जाहीर</strong><br /><span class="muted"
+                >Every Month 29th
+              </span>
+            </div>
+          </div>
+          <p class="pill" style="margin-top: 10px">
+            Note: Form + Fee ₹99 भरल्यानंतर तुमच्या अर्जाचा Application ID आणि
+            पुढील अपडेट्स Email/SMS वर मिळतील.
+          </p>
+        </div>
+      </section>
+
+      <!-- PROCESS -->
+      <section id="process">
+        <div class="container section-card">
+          <h2>अर्ज कसा करावा? (Registration Process)</h2>
+          <div class="steps">
+            <div class="step">
+              <div class="no">1</div>
+              <div><strong>Online Registration Form भरा</strong></div>
+            </div>
+            <div class="step">
+              <div class="no">2</div>
+              <div><strong>Entry Fee भरा – ₹99</strong> (PhonePe/UPI)</div>
+            </div>
+            <div class="step">
+              <div class="no">3</div>
+              <div>
+                <strong>Verification & Shortlisting</strong> (Documents +
+                Criteria Weightage)
+              </div>
+            </div>
+            <div class="step">
+              <div class="no">4</div>
+              <div><strong>Final Result & Scholarship Disbursal</strong></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- APPLY FORM -->
+      <section id="apply">
+        <div class="container section-card">
+          <h2>Apply Now – Registration Form</h2>
+          <p class="muted">
+            कृपया सर्व माहिती अचूक भरा. (*) असलेले field अनिवार्य आहेत.
+          </p>
+
+          <form id="scholarshipForm" enctype="multipart/form-data">
+            <!-- Basic -->
+            <div class="grid cols-2">
+              <div class="field">
+                <label for="name">Full Name / पूर्ण नाव *</label>
+                <input class="input" id="name" name="name" required />
+              </div>
+              <div class="field">
+                <label for="dob">Date of Birth / जन्मतारीख *</label>
+                <input class="input" id="dob" name="dob" type="date" required />
+              </div>
+              <div class="field">
+                <label for="gender">Gender / लिंग *</label>
+                <select id="gender" name="gender" required>
+                  <option value="">Select / निवडा</option>
+                  <option>Male / पुरुष</option>
+                  <option>Female / स्त्री</option>
+                  <option>Other / इतर</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="email">Email / ईमेल *</label>
+                <input
+                  class="input"
+                  id="email"
+                  name="email"
+                  type="email"
+                  required
+                />
+              </div>
+              <div class="field">
+                <label for="phone">Mobile Number / मोबाईल नंबर *</label>
+                <input
+                  class="input"
+                  id="phone"
+                  name="phone"
+                  type="tel"
+                  pattern="[6-9][0-9]{9}"
+                  placeholder="10-digit (6-9 से शुरू)"
+                  maxlength="10"
+                  required
+                />
+                <div class="hint">Indian number starting with 6-9</div>
+              </div>
+              <div class="field">
+                <label for="category">Class / Course / शिक्षण *</label>
+                <select id="category" name="category" required>
+                  <option value="">Select</option>
+                  <option>5वी–7वी</option>
+                  <option>8वी–12वी</option>
+                  <option>ITI</option>
+                  <option>Diploma</option>
+                  <option>Engineering</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="school">School / College/ शाळा.कॉलेज *</label>
+                <input class="input" id="school" name="school" required />
+              </div>
+            </div>
+
+            <!-- Address -->
+            <div class="grid cols-3">
+              <div class="field">
+                <label for="state">State / राज्य *</label>
+                <input class="input" id="state" name="state" required />
+              </div>
+              <div class="field">
+                <label for="district">District / जिल्हा *</label>
+                <input class="input" id="district" name="district" required />
+              </div>
+              <div class="field">
+                <label for="pincode">Pincode / पिनकोड *</label>
+                <input
+                  class="input"
+                  id="pincode"
+                  name="pincode"
+                  pattern="[0-9]{6}"
+                  placeholder="6-digit"
+                  maxlength="6"
+                  required
+                />
+              </div>
+            </div>
+            <div class="field">
+              <label for="address">Address / पत्ता *</label>
+              <textarea id="address" name="address" required></textarea>
+            </div>
+
+            <!-- Income & extras -->
+            <div class="grid cols-2">
+              <div class="field">
+                <label for="income_amount"
+                  >Annual Family Income (₹) / वार्षिक उत्पन्न *</label
+                >
+                <input
+                  class="input"
+                  id="income_amount"
+                  name="income_amount"
+                  type="number"
+                  min="0"
+                  max="10000000"
+                  placeholder="e.g., 250000"
+                  required
+                />
+                <div class="hint">उदा. 250000</div>
+              </div>
+              <div class="field">
+                <label for="income_band">Income Band / उत्पन्न श्रेणी *</label>
+                <select id="income_band" name="income_band" required>
+                  <option value="">Select / निवडा</option>
+                  <option>Below ₹1,00,000</option>
+                  <option>₹1,00,000 – ₹3,00,000</option>
+                  <option>₹3,00,000 – ₹5,00,000</option>
+                  <option>Above ₹5,00,000</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="grid cols-2">
+              <div class="field">
+                <label for="achievements">Achievements / कामगिरी </label>
+                <textarea
+                  id="achievements"
+                  name="achievements"
+                  placeholder="Competitions, awards, positions, sports, academics..."
+                ></textarea>
+              </div>
+              <div class="field">
+                <label for="recommendation"
+                  >Recommendation (Name & Contact) / शिफारस (नाव/संपर्क)</label
+                >
+                <textarea
+                  id="recommendation"
+                  name="recommendation"
+                  placeholder="Principal / Teacher / HOD name and contact"
+                ></textarea>
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="sop"
+                >Statement of Purpose (SOP) / स्कॉलरशिप का पाहिजे *</label
+              >
+              <textarea
+                id="sop"
+                name="sop"
+                required
+                minlength="50"
+                placeholder="Why do you deserve this scholarship? Your goals, financial need, how this will help you... (minimum 50 characters) / तुम्हाला शिष्यवृत्ती का हवी आहे?"
+              ></textarea>
+              <div class="hint">Minimum 50 characters required</div>
+            </div>
+
+            <div class="field">
+              <label class="hint"
+                ><input type="checkbox" id="consent" required /> मी खात्री देतो
+                की सर्व माहिती अचूक आहे व नियमांना सहमती देतो.</label
+              >
+            </div>
+
+            <div class="pill" style="margin-top: 8px">
+              💳 Entry Fee: <strong>₹99</strong> • Payment केल्यानंतरच अर्ज
+              पूर्ण मानला जाईल. Application ID आणि updates email वर येतील.
+            </div>
+
+            <div
+              style="
+                display: flex;
+                gap: 10px;
+                flex-wrap: wrap;
+                margin-top: 12px;
+              "
+            >
+              <button id="submitBtn" type="submit" class="btn primary">
+                Submit & Pay ₹99
+              </button>
+            </div>
+
+            <p
+              style="
+                margin-top: 10px;
+                font-size: 13px;
+                color: #cbd5e1;
+                line-height: 1.5;
+              "
+            >
+              📌 दर महिन्याला <strong>टॉप ५ विद्यार्थी</strong> शॉर्टलिस्ट केले
+              जातील. त्यांची नावे आमच्या
+              <a
+                href="https://instagram.com/naukrivalaa"
+                target="_blank"
+                style="color: #60a5fa"
+                >@naukrivalaa</a
+              >
+              Instagram account वर स्टोरीद्वारे जाहीर केली जातील. निवडलेल्या
+              विद्यार्थ्यांना व्यक्तिगतरीत्या संपर्क साधून Scholarship रक्कम थेट
+              त्यांच्या बँक खात्यात जमा केली जाईल.
+            </p>
+
+            <p class="muted" style="margin-top: 10px">
+              संपर्क:
+              <a href="mailto:contact@naukrivalaafoundation.com"
+                >contact@naukrivalaafoundation.com</a
+              >
+              • <a href="tel:+919356625834">+91 93566 25834 (WhatsApp only)</a>
+            </p>
+          </form>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div
+        style="
+          text-align: center;
+          padding: 15px;
+          background: rgba(19, 27, 58, 0.3);
+          border-top: 1px solid rgba(255, 255, 255, 0.08);
+          color: #cbd5e1;
+        "
+      >
+        &copy; 2025 Naukrivalaa Foundation. All Rights Reserved. <br />
+        <div class="footer-links">
+          <a href="index.html">Home</a>
+          <a href="about.html">About Us</a>
+          <a href="terms.html">Terms</a>
+          <a href="privacy.html">Privacy</a>
+          <a href="refund.html">Refund Policy</a>
+          <a href="contact.html">Contact</a>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
