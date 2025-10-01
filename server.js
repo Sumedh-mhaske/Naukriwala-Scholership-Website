@@ -19,7 +19,7 @@ app.use(
   }),
 );
 
-// Express middleware (REMOVE DUPLICATE)
+// Express middleware
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true }));
 
@@ -63,18 +63,10 @@ const PHONEPE_URLS = {
   },
 };
 
-// MongoDB connection (KEEP ONLY ONE VERSION)
+// MongoDB connection (SIMPLIFIED - FIXED)
 mongoose.connect(process.env.MONGODB_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
-  serverSelectionTimeoutMS: 5000,
-  socketTimeoutMS: 45000,
-  family: 4,
-  retryWrites: true,
-  retryReads: true,
-  maxPoolSize: 10,
-  bufferMaxEntries: 0,
-  bufferCommands: false,
 });
 
 const db = mongoose.connection;
@@ -84,23 +76,11 @@ db.on("error", (error) => {
 });
 db.once("open", () => {
   console.log("✅ Connected to MongoDB");
-  fixDatabaseIndexes(); // Make sure this function exists later in your file
+  fixDatabaseIndexes();
 });
 db.on("disconnected", () => {
   console.log("📡 MongoDB disconnected. Attempting to reconnect...");
 });
-
-// Continue with your schemas, routes, etc...
-
-// MongoDB connection
-mongoose.connect(process.env.MONGODB_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
-
-// const db = mongoose.connection;
-db.on("error", (error) => console.error("❌ MongoDB connection error:", error));
-db.once("open", () => console.log("✅ Connected to MongoDB"));
 
 // Schemas
 const applicationSchema = new mongoose.Schema({
@@ -142,7 +122,7 @@ const applicationSchema = new mongoose.Schema({
 
 const paymentSchema = new mongoose.Schema({
   applicationId: { type: String, required: true },
-  merchantOrderId: { type: String, required: true, unique: true }, // Keep this name
+  merchantOrderId: { type: String, required: true, unique: true },
   phonePeOrderId: { type: String },
   amount: { type: Number, required: true },
   status: {
@@ -155,23 +135,18 @@ const paymentSchema = new mongoose.Schema({
   updatedAt: { type: Date, default: Date.now },
 });
 
-// Add this after your MongoDB connection in server.js:
-
+// Database indexes function
 async function fixDatabaseIndexes() {
   try {
     console.log("🔧 Checking and fixing database indexes...");
 
-    // Get the payments collection
     const paymentsCollection = mongoose.connection.db.collection("payments");
-
-    // Get existing indexes
     const indexes = await paymentsCollection.indexes();
     console.log(
       "📋 Current indexes:",
       indexes.map((idx) => idx.name),
     );
 
-    // Drop the problematic old index if it exists
     try {
       await paymentsCollection.dropIndex("merchantTransactionId_1");
       console.log("🗑️ Dropped old merchantTransactionId index");
@@ -183,7 +158,6 @@ async function fixDatabaseIndexes() {
       }
     }
 
-    // Ensure correct indexes exist
     await paymentsCollection.createIndex(
       { merchantOrderId: 1 },
       { unique: true },
@@ -202,20 +176,13 @@ async function fixDatabaseIndexes() {
   }
 }
 
-// Call this after MongoDB connection is established
-db.once("open", () => {
-  console.log("✅ Connected to MongoDB");
-  fixDatabaseIndexes(); // Add this line
-});
-
 // Indexes
 applicationSchema.index({ email: 1, phone: 1 });
 applicationSchema.index({ status: 1, createdAt: -1 });
 applicationSchema.index({ paymentStatus: 1, createdAt: -1 });
 applicationSchema.index({ applicationId: 1 }, { unique: true });
 
-// Update indexes to match
-paymentSchema.index({ merchantOrderId: 1 }, { unique: true }); // Keep this name
+paymentSchema.index({ merchantOrderId: 1 }, { unique: true });
 paymentSchema.index({ applicationId: 1, status: 1 });
 paymentSchema.index({ status: 1, createdAt: -1 });
 
@@ -243,10 +210,9 @@ let tokenCache = {
   expiresAt: 0,
 };
 
-// OAuth V2 Token Generation (WORKING VERSION)
+// OAuth V2 Token Generation
 async function generateAuthToken() {
   try {
-    // Check if we have a valid cached token
     if (tokenCache.token && Date.now() < tokenCache.expiresAt - 60000) {
       console.log("🔄 Using cached OAuth token");
       return tokenCache.token;
@@ -254,7 +220,6 @@ async function generateAuthToken() {
 
     const tokenEndpoint = PHONEPE_URLS[PHONEPE_CONFIG.env].token;
 
-    // Working OAuth V2 format
     const requestBodyJson = {
       client_version: PHONEPE_CONFIG.clientVersion,
       grant_type: "client_credentials",
@@ -278,9 +243,8 @@ async function generateAuthToken() {
     if (response.data && response.data.access_token) {
       console.log("✅ OAuth V2 token generated successfully!");
 
-      // Cache the token
       tokenCache.token = response.data.access_token;
-      tokenCache.expiresAt = response.data.expires_at * 1000; // Convert to milliseconds
+      tokenCache.expiresAt = response.data.expires_at * 1000;
 
       console.log("🕒 Token expires at:", new Date(tokenCache.expiresAt));
       return response.data.access_token;
@@ -294,7 +258,6 @@ async function generateAuthToken() {
     console.error("Status:", error.response?.status);
     console.error("Response:", JSON.stringify(error.response?.data, null, 2));
 
-    // Clear cache on error
     tokenCache.token = null;
     tokenCache.expiresAt = 0;
 
@@ -302,7 +265,7 @@ async function generateAuthToken() {
   }
 }
 
-// Input sanitization and validation functions (same as before)
+// Utility functions
 function sanitizeInput(req, res, next) {
   if (req.body) {
     for (let key in req.body) {
@@ -351,14 +314,12 @@ function validateApplicationData(data) {
   return errors;
 }
 
-// Find the checkDuplicatePayment function and update it:
-
 async function checkDuplicatePayment(applicationId, timeWindowMinutes = 30) {
   const cutoffTime = new Date(Date.now() - timeWindowMinutes * 60 * 1000);
 
   const existingPayment = await Payment.findOne({
     applicationId,
-    status: { $in: ["completed"] }, // Only block if payment is completed
+    status: { $in: ["completed"] },
     createdAt: { $gte: cutoffTime },
   });
 
@@ -418,7 +379,7 @@ app.get("/health", async (req, res) => {
   res.json(health);
 });
 
-// Application Submission (same as before)
+// Application Submission
 app.post(
   "/api/application/submit",
   generalLimiter,
@@ -475,9 +436,7 @@ app.post(
   },
 );
 
-// Payment Initiation (OAuth V2 - WORKING VERSION)
-// FIXED VERSION - Replace your payment initiation route with this:
-
+// Payment Initiation (FIXED VERSION)
 app.post(
   "/api/payment/initiate",
   paymentLimiter,
@@ -509,7 +468,7 @@ app.post(
         });
       }
 
-      // CHECK FOR EXISTING PAYMENT FIRST (BEFORE CREATING NEW ONE)
+      // CHECK FOR EXISTING PAYMENT FIRST
       const existingPayment = await Payment.findOne({ merchantOrderId });
       if (existingPayment) {
         return res.status(409).json({
@@ -541,11 +500,10 @@ app.post(
       const authToken = await generateAuthToken();
 
       // V2 Payment payload
-      // In your payment initiation route, ensure the payload matches V2 format exactly:
       const requestBody = {
         merchantOrderId: merchantOrderId,
-        amount: amount * 100, // Convert to paisa
-        expireAfter: 1800, // 30 minutes
+        amount: amount * 100,
+        expireAfter: 1800,
         metaInfo: {
           udf1: applicationId,
           udf2: name,
@@ -583,7 +541,7 @@ app.post(
       console.log("✅ PhonePe V2 Payment Response (OAuth):", response.data);
 
       if (response.data && response.data.redirectUrl && response.data.orderId) {
-        // NOW SAVE THE PAYMENT (AFTER SUCCESSFUL PHONEPE RESPONSE)
+        // SAVE THE PAYMENT AFTER SUCCESSFUL PHONEPE RESPONSE
         const payment = new Payment({
           applicationId,
           merchantOrderId,
@@ -634,7 +592,7 @@ app.post(
   },
 );
 
-// Payment Status Check (OAuth V2 - WORKING VERSION)
+// Payment Status Check
 app.get("/api/payment/status/:merchantOrderId", async (req, res) => {
   try {
     const { merchantOrderId } = req.params;
@@ -646,8 +604,7 @@ app.get("/api/payment/status/:merchantOrderId", async (req, res) => {
       });
     }
 
-    // Find local payment record - use correct field name
-    const localPayment = await Payment.findOne({ merchantOrderId }); // Make sure this matches
+    const localPayment = await Payment.findOne({ merchantOrderId });
     if (!localPayment) {
       return res.status(404).json({
         success: false,
@@ -655,10 +612,8 @@ app.get("/api/payment/status/:merchantOrderId", async (req, res) => {
       });
     }
 
-    // Generate fresh auth token
     const authToken = await generateAuthToken();
 
-    // V2 Status endpoint
     const requestHeaders = {
       "Content-Type": "application/json",
       Authorization: `O-Bearer ${authToken}`,
@@ -680,7 +635,6 @@ app.get("/api/payment/status/:merchantOrderId", async (req, res) => {
     let applicationStatus = "pending";
     let shouldSendEmail = false;
 
-    // Handle order states
     switch (orderState) {
       case "COMPLETED":
         localStatus = "completed";
@@ -704,9 +658,8 @@ app.get("/api/payment/status/:merchantOrderId", async (req, res) => {
         applicationStatus = "pending";
     }
 
-    // Update payment record - use correct field name
     const updatedPayment = await Payment.findOneAndUpdate(
-      { merchantOrderId }, // Use this consistently
+      { merchantOrderId },
       {
         status: localStatus,
         phonePeOrderId: response.data.orderId,
@@ -716,7 +669,6 @@ app.get("/api/payment/status/:merchantOrderId", async (req, res) => {
       { new: true },
     );
 
-    // Update application status
     const application = await Application.findOneAndUpdate(
       { applicationId: localPayment.applicationId },
       {
@@ -729,7 +681,6 @@ app.get("/api/payment/status/:merchantOrderId", async (req, res) => {
       { new: true },
     );
 
-    // Send confirmation email for successful payments
     if (shouldSendEmail && orderState === "COMPLETED" && application) {
       try {
         await sendConfirmationEmail(application, response.data.orderId);
@@ -775,7 +726,7 @@ app.get("/api/payment/status/:merchantOrderId", async (req, res) => {
   }
 });
 
-// Payment Status Page (same as before)
+// Payment Status Page
 app.get("/payment-status", (req, res) => {
   const { transactionId } = req.query;
 
@@ -871,249 +822,6 @@ app.get("/api/application/:applicationId", async (req, res) => {
     res.status(500).json({
       success: false,
       message: "Failed to fetch application",
-    });
-  }
-});
-
-// Add this temporary endpoint to your server.js for cleanup:
-
-app.post("/api/admin/clear-payments", async (req, res) => {
-  try {
-    // WARNING: This will delete all payment records
-    const result = await Payment.deleteMany({});
-    console.log(
-      "🗑️ Cleared payments collection:",
-      result.deletedCount,
-      "records",
-    );
-
-    res.json({
-      success: true,
-      message: `Cleared ${result.deletedCount} payment records`,
-      deletedCount: result.deletedCount,
-    });
-  } catch (error) {
-    console.error("Error clearing payments:", error);
-    res.status(500).json({
-      success: false,
-      error: error.message,
-    });
-  }
-});
-
-// Add this temporary debug endpoint:
-app.get("/api/debug/schema", async (req, res) => {
-  try {
-    // Get payment collection info
-    const paymentCount = await Payment.countDocuments({});
-    const samplePayment = await Payment.findOne({});
-
-    console.log("Payment collection stats:");
-    console.log("Count:", paymentCount);
-    console.log("Sample record:", samplePayment);
-
-    res.json({
-      success: true,
-      paymentCount,
-      samplePayment,
-      schemaFields: Object.keys(Payment.schema.paths),
-    });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      error: error.message,
-    });
-  }
-});
-
-// Add this cleanup endpoint to your server.js:
-
-app.post("/api/admin/clear-applications", async (req, res) => {
-  try {
-    const email = req.body.email;
-    const phone = req.body.phone;
-
-    if (email || phone) {
-      // Clear specific user
-      const query = {};
-      if (email) query.email = email;
-      if (phone) query.phone = phone;
-
-      const result = await Application.deleteOne(query);
-      console.log("🗑️ Cleared specific application:", result);
-
-      res.json({
-        success: true,
-        message: `Cleared application for ${email || phone}`,
-        deletedCount: result.deletedCount,
-      });
-    } else {
-      // Clear all applications (BE CAREFUL!)
-      const result = await Application.deleteMany({});
-      console.log(
-        "🗑️ Cleared all applications:",
-        result.deletedCount,
-        "records",
-      );
-
-      res.json({
-        success: true,
-        message: `Cleared ${result.deletedCount} application records`,
-        deletedCount: result.deletedCount,
-      });
-    }
-  } catch (error) {
-    console.error("Error clearing applications:", error);
-    res.status(500).json({
-      success: false,
-      error: error.message,
-    });
-  }
-});
-
-// Add this endpoint to your server.js:
-app.post("/api/admin/clear-payment", async (req, res) => {
-  try {
-    const { merchantOrderId } = req.body;
-
-    if (merchantOrderId) {
-      const result = await Payment.deleteOne({ merchantOrderId });
-      console.log("🗑️ Cleared specific payment:", merchantOrderId);
-
-      res.json({
-        success: true,
-        message: `Cleared payment ${merchantOrderId}`,
-        deletedCount: result.deletedCount,
-      });
-    } else {
-      res.status(400).json({
-        success: false,
-        message: "merchantOrderId required",
-      });
-    }
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      error: error.message,
-    });
-  }
-});
-
-// Add this temporary cleanup endpoint to your server.js:
-app.delete("/api/admin/cleanup-user/:email", async (req, res) => {
-  try {
-    const { email } = req.params;
-
-    console.log(`🧹 Cleaning up data for user: ${email}`);
-
-    // Clear payments for this user's applications
-    const userApplications = await Application.find({ email });
-    const applicationIds = userApplications.map((app) => app.applicationId);
-
-    const paymentDeleteResult = await Payment.deleteMany({
-      applicationId: { $in: applicationIds },
-    });
-
-    // Clear applications for this user
-    const appDeleteResult = await Application.deleteMany({ email });
-
-    console.log(`🗑️ Deleted ${paymentDeleteResult.deletedCount} payments`);
-    console.log(`🗑️ Deleted ${appDeleteResult.deletedCount} applications`);
-
-    res.json({
-      success: true,
-      message: `Cleaned up data for ${email}`,
-      deleted: {
-        payments: paymentDeleteResult.deletedCount,
-        applications: appDeleteResult.deletedCount,
-      },
-    });
-  } catch (error) {
-    console.error("Cleanup error:", error);
-    res.status(500).json({
-      success: false,
-      error: error.message,
-    });
-  }
-});
-
-// Add this endpoint for complete database reset:
-app.post("/api/admin/reset-database", async (req, res) => {
-  try {
-    console.log("🗑️ RESETTING ENTIRE DATABASE...");
-
-    // Clear all collections
-    await Application.deleteMany({});
-    await Payment.deleteMany({});
-
-    // Drop and recreate collections to fix indexes
-    await mongoose.connection.db
-      .collection("applications")
-      .drop()
-      .catch(() => {});
-    await mongoose.connection.db
-      .collection("payments")
-      .drop()
-      .catch(() => {});
-
-    console.log("✅ Database reset complete");
-
-    res.json({
-      success: true,
-      message: "Database reset successfully - all data cleared",
-    });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      error: error.message,
-    });
-  }
-});
-
-// Add this COMPLETE database reset endpoint:
-app.post("/api/admin/nuclear-reset", async (req, res) => {
-  try {
-    console.log("💥 NUCLEAR RESET - Clearing everything...");
-
-    // Drop entire collections to remove all indexes and data
-    try {
-      await mongoose.connection.db.collection("payments").drop();
-      console.log("🗑️ Dropped payments collection completely");
-    } catch (e) {
-      console.log("⚠️ Payments collection didn't exist");
-    }
-
-    try {
-      await mongoose.connection.db.collection("applications").drop();
-      console.log("🗑️ Dropped applications collection completely");
-    } catch (e) {
-      console.log("⚠️ Applications collection didn't exist");
-    }
-
-    // Wait a moment
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-
-    // Force recreate the models to rebuild proper indexes
-    delete mongoose.connection.models.Payment;
-    delete mongoose.connection.models.Application;
-
-    // Recreate models with correct schemas
-    const Application = mongoose.model("Application", applicationSchema);
-    const Payment = mongoose.model("Payment", paymentSchema);
-
-    console.log("✅ Collections dropped and models recreated");
-    console.log("✅ Fresh database ready for testing");
-
-    res.json({
-      success: true,
-      message: "Nuclear reset complete - database is completely fresh",
-      timestamp: new Date().toISOString(),
-    });
-  } catch (error) {
-    console.error("❌ Nuclear reset error:", error);
-    res.status(500).json({
-      success: false,
-      error: error.message,
     });
   }
 });
