@@ -1,5 +1,5 @@
 // ====== CONFIG ======
-const BACKEND_BASE_URL = "http://localhost:3000";
+const BACKEND_BASE_URL = "https://naukriwala-scholership-website.onrender.com";
 
 console.log("🚀 OAuth V2 Integration Loaded (Production Ready!)");
 console.log("Using backend URL:", BACKEND_BASE_URL);

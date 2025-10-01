@@ -13,28 +13,20 @@ const app = express();
 // Find this section in your server.js and replace it:
 
 // CORS Configuration (COMPLETE FIX)
+// Simple CORS for production
 const corsOptions = {
-  origin: function (origin, callback) {
-    // Allow requests with no origin (mobile apps, curl, etc.)
-    if (!origin) return callback(null, true);
+  origin: [
+    // Development
+    "http://localhost:5500",
+    "http://localhost:5501",
+    "http://localhost:8080",
+    "http://127.0.0.1:5500",
+    "http://127.0.0.1:5501",
 
-    const allowedOrigins = [
-      "http://localhost:5500",
-      "http://127.0.0.1:5500",
-      "http://localhost:5501",
-      "http://127.0.0.1:5501", // This fixes your current error
-      "http://localhost:3000",
-      "http://127.0.0.1:3000",
-      "https://your-domain.com",
-    ];
-
-    if (allowedOrigins.indexOf(origin) !== -1) {
-      callback(null, true);
-    } else {
-      console.log("❌ CORS blocked origin:", origin);
-      callback(new Error("Not allowed by CORS"));
-    }
-  },
+    // Production
+    "https://naukriwala-scholership-website.netlify.app",
+    "https://naukriwala-scholership-website.onrender.com",
+  ],
   credentials: true,
   optionsSuccessStatus: 200,
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
