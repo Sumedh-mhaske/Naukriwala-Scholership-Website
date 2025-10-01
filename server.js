@@ -135,18 +135,36 @@ const paymentSchema = new mongoose.Schema({
   updatedAt: { type: Date, default: Date.now },
 });
 
-// Database indexes function
 async function fixDatabaseIndexes() {
   try {
     console.log("🔧 Checking and fixing database indexes...");
 
+    // Check if payments collection exists first
+    const collections = await mongoose.connection.db
+      .listCollections()
+      .toArray();
+    const collectionNames = collections.map((col) => col.name);
+
+    console.log("📋 Available collections:", collectionNames);
+
+    // Create payments collection if it doesn't exist
+    if (!collectionNames.includes("payments")) {
+      console.log("📦 Creating payments collection...");
+      await mongoose.connection.db.createCollection("payments");
+      console.log("✅ Created payments collection");
+    }
+
+    // Get the payments collection
     const paymentsCollection = mongoose.connection.db.collection("payments");
+
+    // Get existing indexes
     const indexes = await paymentsCollection.indexes();
     console.log(
       "📋 Current indexes:",
       indexes.map((idx) => idx.name),
     );
 
+    // Drop old problematic index if it exists
     try {
       await paymentsCollection.dropIndex("merchantTransactionId_1");
       console.log("🗑️ Dropped old merchantTransactionId index");
@@ -158,6 +176,7 @@ async function fixDatabaseIndexes() {
       }
     }
 
+    // Create new indexes
     await paymentsCollection.createIndex(
       { merchantOrderId: 1 },
       { unique: true },
@@ -172,7 +191,9 @@ async function fixDatabaseIndexes() {
 
     console.log("🎉 Database indexes fixed successfully!");
   } catch (error) {
-    console.error("❌ Error fixing database indexes:", error);
+    console.error("❌ Error fixing database indexes:", error.message);
+    // Don't crash the server if index creation fails
+    console.log("⚠️ Continuing without custom indexes...");
   }
 }
 
